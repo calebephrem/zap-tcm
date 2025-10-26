@@ -1,6 +1,12 @@
 # Change Log
 
-## `v3.3.2`
+## `v3.4.0`
+
+### 🚀 Enhancements
+
+- Show config settings from `args[1]` if no scope flag is provided on `zap config`
+
+### 🛠️ Fixes
 
 - Default to fallback branch when global config is not found
 

@@ -170,6 +170,9 @@ switch (cmd) {
       await setConfig('global', args[2], args[3]);
     } else if (args[1] === '--local' || args[1] === '-l') {
       await setConfig('local', args[2], args[3]);
+    } else {
+      const globalConfig = await getGlobalConfig();
+      console.log(globalConfig[args[1]] || '');
     }
     break;
 
