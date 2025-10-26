@@ -13,8 +13,8 @@ import data from './data.js';
 export async function init() {
   if (!fs.existsSync(data.basedir)) {
     await createFolder(data.basedir);
-    await branch(data.globalConfig['init.defaultBranch'], false);
-    await writeFile(data.branch, data.globalConfig['init.defaultBranch']);
+    await branch(data.globalConfig['init.defaultBranch'] || 'main', false);
+    await writeFile(data.branch, data.globalConfig['init.defaultBranch'] || 'main');
   } else {
     console.error('.zap repository already exists.');
     process.exit(1);

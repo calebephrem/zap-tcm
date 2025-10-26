@@ -1,5 +1,9 @@
 # Change Log
 
+## `v3.3.2`
+
+- Default to fallback branch when global config is not found
+
 ## `v3.3.1`
 
 ### 🛠️ Fixes
