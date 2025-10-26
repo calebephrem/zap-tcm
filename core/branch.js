@@ -1,7 +1,7 @@
 import path from 'path';
 import ucid from 'unique-custom-id';
 import { readdir, readFile, rmfile, writeFile } from '../utils/fs.js';
-import { padLog } from '../utils/log.js';
+import { cLog, clr, padLog } from '../utils/log.js';
 import { sliceSHA } from '../utils/zap.js';
 import data from './data.js';
 
@@ -24,7 +24,14 @@ export async function branch(name, log = true) {
     path.join(data.basedir, `${name}.json`),
     JSON.stringify(obj, null, 2)
   );
-  log ? console.log(`Created branch: ${name} [${sliceSHA(id)}]`) : null;
+  log
+    ? cLog(
+        `Created branch: ${clr(name, 'blue')} [${clr(
+          sliceSHA(id),
+          'yellowBright'
+        )}]`
+      )
+    : null;
 }
 
 export async function getBranchObject() {
@@ -62,19 +69,24 @@ export async function writeBranchObject(branchObj) {
 
 export async function deleteBranch(name) {
   if (!name) {
-    console.error('Please provide a branch name to delete.');
+    cLog('Please provide a branch name to delete.', 'redBright');
     process.exit(1);
   }
   const branches = await readdir(data.basedir);
   const exists = branches.includes(`${name}.json`);
   if (!exists) {
-    console.error(`Branch ${name} does not exist.`);
+    cLog(`Branch ${clr(name, 'blueBright')} does not exist.`, 'redBright');
     process.exit(1);
   }
   const raw = await readFile(path.join(data.basedir, `${name}.json`));
   const id = JSON.parse(raw).id;
   await rmfile(path.join(data.basedir, `${name}.json`));
-  console.log(`Deleted branch ${name} [${sliceSHA(id)}]`);
+  cLog(
+    `Deleted branch ${clr(name, 'blueBright')} [${clr(
+      sliceSHA(id),
+      'yellowBright'
+    )}]`
+  );
 }
 
 export async function mergeBranches(sourceBranch, targetBranch) {
@@ -82,10 +94,10 @@ export async function mergeBranches(sourceBranch, targetBranch) {
     targetBranch = await currentBranch();
   }
   if (!sourceBranch) {
-    console.error('Please provide a source branch to merge from.');
+    cLog('Please provide a source branch to merge from.', 'redBright');
   }
   if (sourceBranch === targetBranch) {
-    console.error("Source and target branches can't be the same.");
+    cLog("Source and target branches can't be the same.", 'redBright');
     process.exit(1);
   }
   const sourceFile = path.join(data.basedir, `${sourceBranch}.json`);
@@ -95,7 +107,7 @@ export async function mergeBranches(sourceBranch, targetBranch) {
     const sourceContent = await readFile(sourceFile);
     sourceObj = JSON.parse(sourceContent);
   } catch (err) {
-    console.error(`Source branch ${sourceBranch} does not exist.`);
+    cLog(`Source branch ${sourceBranch} does not exist.`, 'redBright');
     process.exit(1);
   }
   try {
@@ -114,23 +126,34 @@ export async function mergeBranches(sourceBranch, targetBranch) {
   });
   targetObj.todos.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   await writeBranchObject(targetObj);
-  console.log(`Merged branch ${sourceBranch} into ${targetBranch}.`);
+  cLog(
+    `Merged branch ${clr(sourceBranch, 'blueBright')} into ${clr(
+      targetBranch,
+      'blueBright'
+    )}.`
+  );
 }
 
 export async function renameBranch(branchName, newBranchName) {
   if (!branchName || !newBranchName) {
-    console.error('Please provide both the current and new branch names.');
+    cLog('Please provide both the current and new branch names.', 'redBright');
     process.exit(1);
   }
   const branches = await readdir(data.basedir);
   const exists = branches.includes(`${branchName}.json`);
   if (!exists) {
-    console.error(`Branch ${branchName} does not exist.`);
+    cLog(
+      `Branch ${clr(branchName, 'blueBright')} does not exist.`,
+      'redBright'
+    );
     process.exit(1);
   }
   const newExists = branches.includes(`${newBranchName}.json`);
   if (newExists) {
-    console.error(`Branch ${newBranchName} already exists.`);
+    cLog(
+      `Branch ${clr(newBranchName, 'blueBright')} already exists.`,
+      'redBright'
+    );
     process.exit(1);
   }
   const oldPath = path.join(data.basedir, `${branchName}.json`);
@@ -148,8 +171,9 @@ export async function renameBranch(branchName, newBranchName) {
 
 export async function importExportBranch(name, direction, filepath) {
   if (!name || !direction || !filepath) {
-    console.error(
-      'Please provide branch name, direction (import/export), and file path.'
+    cLog(
+      'Please provide branch name, direction (import/export), and file path.',
+      'redBright'
     );
     process.exit(1);
   }
@@ -157,13 +181,23 @@ export async function importExportBranch(name, direction, filepath) {
   if (direction === 'export') {
     const branchObj = await getBranchObject();
     await writeFile(filepath, JSON.stringify(branchObj, null, 2));
-    console.log(`Exported branch ${name} to ${filepath}`);
+    cLog(
+      `Exported branch ${clr(name, 'blueBright')} to ${clr(
+        filepath,
+        'blueBright'
+      )}`
+    );
   } else if (direction === 'import') {
     const content = await readFile(filepath);
     await writeFile(file, content);
-    console.log(`Imported branch ${name} from ${filepath}`);
+    cLog(
+      `Imported branch ${clr(name, 'blueBright')} from ${clr(
+        filepath,
+        'blueBright'
+      )}`
+    );
   } else {
-    console.error('Direction must be either "import" or "export".');
+    cLog('Direction must be either "import" or "export".', 'redBright');
     process.exit(1);
   }
 }
@@ -177,7 +211,7 @@ export async function switchBranch(br) {
   } else {
     await writeFile(data.branch, br);
   }
-  console.log(`Switched to branch: ${br}`);
+  cLog(`Switched to branch: ${clr(br, 'blueBright')}`);
 }
 
 export async function currentBranch() {

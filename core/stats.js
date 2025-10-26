@@ -1,5 +1,6 @@
 import path from 'path';
 import { readdir, readFile } from '../utils/fs.js';
+import { cLog, clr } from '../utils/log.js';
 import { getBranchObject } from './branch.js';
 import data from './data.js';
 
@@ -13,11 +14,11 @@ export async function stats() {
   const productivityRate = totalTasks
     ? ((completedTasks / totalTasks) * 100).toFixed(2)
     : 0;
-  console.log(`Statistics for branch: ${branchObj.name}`);
-  console.log(`Total tasks: ${totalTasks}`);
-  console.log(`Completed tasks: ${completedTasks}`);
-  console.log(`Incomplete tasks: ${incompleteTasks}`);
-  console.log(`Productivity rate: ${productivityRate}%`);
+  cLog(`Statistics for branch: ${clr(branchObj.name, 'blueBright')}`);
+  cLog(`Total tasks: ${clr(totalTasks, 'greenBright')}`);
+  cLog(`Completed tasks: ${clr(completedTasks, 'cyanBright')}`);
+  cLog(`Incomplete tasks: ${clr(incompleteTasks, 'redBright')}`);
+  cLog(`Productivity rate: ${clr(productivityRate, 'magentaBright')}%`);
 }
 
 export async function globalStats() {
@@ -36,9 +37,9 @@ export async function globalStats() {
   const productivityRate = totalTasks
     ? ((completedTasks / totalTasks) * 100).toFixed(2)
     : 0;
-  console.log(`Global Statistics across all branches:`);
-  console.log(`Total tasks: ${totalTasks}`);
-  console.log(`Completed tasks: ${completedTasks}`);
-  console.log(`Incomplete tasks: ${incompleteTasks}`);
-  console.log(`Productivity rate: ${productivityRate}%`);
+  cLog(`Global Statistics across all branches:`);
+  cLog(`Total tasks: ${clr(totalTasks, 'greenBright')}`);
+  cLog(`Completed tasks: ${clr(completedTasks, 'cyanBright')}`);
+  cLog(`Incomplete tasks: ${clr(incompleteTasks, 'redBright')}`);
+  cLog(`Productivity rate: ${clr(productivityRate, 'magentaBright')}%`);
 }

@@ -1,5 +1,12 @@
 # Change Log
 
+## `v3.5.0`
+
+### 🚀 Enhancements
+
+- Add colored log output using chalk
+- Add `rm` alias to `remove`
+
 ## `v3.4.0`
 
 ### 🚀 Enhancements

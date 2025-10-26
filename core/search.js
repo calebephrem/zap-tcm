@@ -1,11 +1,12 @@
 import path from 'path';
 import { readdir, readFile } from '../utils/fs.js';
+import { cLog, clr } from '../utils/log.js';
 import { getBranchObject } from './branch.js';
 import data from './data.js';
 
 export async function searchTodos(keyword) {
   if (!keyword) {
-    console.error('Please provide a keyword to search for.');
+    cLog('Please provide a keyword to search for.', 'redBright');
     process.exit(1);
   }
   const branchObj = await getBranchObject();
@@ -14,24 +15,24 @@ export async function searchTodos(keyword) {
     todo.task.toLowerCase().includes(keyword.toLowerCase())
   );
   if (results.length === 0) {
-    console.log('No matching tasks found.');
+    cLog('No matching tasks found.');
     return;
   }
-  console.log(
+  cLog(
     `Found ${results.length} matching task${results.length > 1 ? 's' : ''}:`
   );
   results.forEach((todo) => {
-    console.log(
-      `${todo.id}. [${todo.completed ? 'x' : ' '}] ${todo.task}${
-        todo.tag ? ` (${todo.tag})` : ``
-      }`
+    cLog(
+      `${clr(todo.id, 'cyanBright')}. ${clr('[', 'cyan')}${
+        todo.completed ? clr('x', 'redBright') : ' '
+      }${clr(']', 'cyan')} ${todo.task}${todo.tag ? ` (${todo.tag})` : ``}`
     );
   });
 }
 
 export async function searchTodosGlobally(keyword) {
   if (!keyword) {
-    console.error('Please provide a keyword to search for.');
+    cLog('Please provide a keyword to search for.', 'redBright');
     process.exit(1);
   }
   const branchFiles = await readdir(data.basedir);
@@ -55,19 +56,22 @@ export async function searchTodosGlobally(keyword) {
     });
   }
   if (allResults.length === 0) {
-    console.log('No matching tasks found across all branches.');
+    cLog('No matching tasks found across all branches.');
     return;
   }
-  console.log(
+  cLog(
     `Found ${allResults.length} matching task${
       allResults.length > 1 ? 's' : ''
     } across all branches:`
   );
   allResults.forEach((todo) => {
-    console.log(
-      `[${todo.branch}] ${todo.id}. [${todo.completed ? 'x' : ' '}] ${
-        todo.task
-      }${todo.tag ? ` (${todo.tag})` : ``}`
+    cLog(
+      `${clr('[', 'cyan')}${clr(todo.branch, 'blueBright')}${clr(
+        ']',
+        'cyan'
+      )} ${clr(todo.id, 'cyanBright')}. ${clr('[', 'cyan')}${
+        todo.completed ? clr('x', 'redBright') : ' '
+      }${clr(']', 'cyan')} ${todo.task}${todo.tag ? ` (${todo.tag})` : ``}`
     );
   });
 }

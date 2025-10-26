@@ -3,10 +3,12 @@
 import {
   addTask,
   branch,
+  cLog,
   completeTask,
   data,
   deleteBranch,
   deleteTask,
+  getGlobalConfig,
   globalStats,
   importExportBranch,
   incompleteTask,
@@ -38,7 +40,7 @@ const helpText = `
                                    ███╔╝  ██╔══██║██╔═══╝ 
                                   ███████╗██║  ██║██║     
                                   ╚══════╝╚═╝  ╚═╝╚═╝   
-                                     Task Manager
+                                      Task Manager
 
 Usage:
   zap <command> [options]
@@ -56,6 +58,7 @@ Task Management:
   remove <id>                           Remove a task
   complete <id>                         Mark as complete
   incomplete <id>                       Mark as incomplete
+  stats [-g | --global]                 Show statistics (global if flag provided)
 
 Search & Organization:
   search <keyword>                      Search in current branch
@@ -76,6 +79,7 @@ Branch Intelligence:
 Configuration:
   config [-g | --global] <key> <value>  Set global configuration
   config [-l | --local] <key> <value>   Set local configuration
+  config <key>                          Get configuration value
 
 General:
   [-v | --version]                      Show version
@@ -114,6 +118,7 @@ switch (cmd) {
     break;
 
   case 'remove':
+  case 'rm':
     await deleteTask(parseInt(args[1], 10));
     break;
 
@@ -172,20 +177,20 @@ switch (cmd) {
       await setConfig('local', args[2], args[3]);
     } else {
       const globalConfig = await getGlobalConfig();
-      console.log(globalConfig[args[1]] || '');
+      cLog(globalConfig[args[1]] || '', 'blue');
     }
     break;
 
   case '--help':
   case '-h':
-    console.log(helpText);
+    cLog(helpText);
     break;
 
   case '--version':
   case '-v':
-    console.log(`v${data.version}`);
+    cLog(`v${data.version}`, 'greenBright');
     break;
 
   default:
-    console.log(helpText);
+    cLog(helpText);
 }

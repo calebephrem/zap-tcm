@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import ucid from 'unique-custom-id';
 import { createFolder, readFile, writeFile } from '../utils/fs.js';
+import { cLog, clr } from '../utils/log.js';
 import {
   branch,
   currentBranch,
@@ -14,24 +15,33 @@ export async function init() {
   if (!fs.existsSync(data.basedir)) {
     await createFolder(data.basedir);
     await branch(data.globalConfig['init.defaultBranch'] || 'main', false);
-    await writeFile(data.branch, data.globalConfig['init.defaultBranch'] || 'main');
+    await writeFile(
+      data.branch,
+      data.globalConfig['init.defaultBranch'] || 'main'
+    );
   } else {
-    console.error('.zap repository already exists.');
+    cLog('.zap repository already exists.', 'redBright');
     process.exit(1);
   }
-  console.log('Initialized empty zap repository in', data.basedir);
+  cLog(`Initialized empty zap repository in ${clr(data.basedir, 'blue')}`);
 }
 
 export async function moveTask(id, targetBranch) {
   const sourceBranch = await currentBranch();
   if (sourceBranch === targetBranch) {
-    console.error('Source and target branches are the same.');
+    cLog('Source and target branches are the same.', 'redBright');
     process.exit(1);
   }
   const sourceObj = await getBranchObject();
   const todoIndex = sourceObj.todos.findIndex((todo) => todo.id === id);
   if (todoIndex === -1) {
-    console.error(`Task with id ${id} not found in branch ${sourceBranch}.`);
+    cLog(
+      `Task with id ${clr(id, 'cyanBright')} not found in branch ${clr(
+        sourceBranch,
+        'blueBright'
+      )}.`,
+      'redBright'
+    );
     process.exit(1);
   }
   const [todo] = sourceObj.todos.splice(todoIndex, 1);
@@ -50,12 +60,17 @@ export async function moveTask(id, targetBranch) {
   }
   targetObj.todos.push(todo);
   await writeBranchObject(targetObj);
-  console.log(`Moved task id ${id} from ${sourceBranch} to ${targetBranch}.`);
+  cLog(
+    `Moved task id ${clr(id, 'cyanBright')} from ${clr(
+      sourceBranch,
+      'blueBright'
+    )} to ${clr(targetBranch, 'blueBright')}.`
+  );
 }
 
 export async function addTask(task) {
   if (!task) {
-    console.error('Please provide a task.');
+    cLog('Please provide a task.', 'redBright');
     process.exit(1);
   }
   const branchObj = await getBranchObject();
@@ -75,7 +90,7 @@ export async function addTask(task) {
   });
   branchObj.todos = todos;
   await writeBranchObject(branchObj);
-  console.log(`Added todo: ${task}`);
+  cLog(`Added todo: ${task}`);
 }
 
 export async function getTodos() {
@@ -86,44 +101,52 @@ export async function getTodos() {
 export async function listTasks() {
   const todos = await getTodos();
   if (todos.length === 0) {
-    console.log('No tasks found.');
+    cLog('No tasks found.');
     return;
   }
   todos.forEach((todo) => {
-    console.log(
-      `${todo.id}. [${todo.completed ? 'x' : ' '}] ${todo.task}${
-        todo.tag ? ` (${todo.tag})` : ``
-      }`
+    cLog(
+      `${clr(todo.id, 'cyanBright')}. ${clr('[', 'cyan')}${
+        todo.completed ? clr('x', 'redBright') : ' '
+      }${clr(']', 'cyan')} ${todo.task}${todo.tag ? ` (${todo.tag})` : ``}`
     );
   });
 }
 
 export async function completeTask(id) {
+  if (!id) {
+    cLog('Please provide a task id.', 'redBright');
+    process.exit(1);
+  }
   const branchObj = await getBranchObject();
   const todos = branchObj.todos;
   const index = todos.findIndex((todo) => todo.id === id);
   if (index === -1) {
-    console.error(`Task with id ${id} not found.`);
+    cLog(`Task with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
     process.exit(1);
   }
   todos[index].completed = true;
   branchObj.todos = todos;
   await writeBranchObject(branchObj);
-  console.log(`Completed task: ${todos[index].task}`);
+  cLog(`Completed task: ${todos[index].task}`);
 }
 
 export async function incompleteTask(id) {
+  if (!id) {
+    cLog('Please provide a task id.', 'redBright');
+    process.exit(1);
+  }
   const branchObj = await getBranchObject();
   const todos = branchObj.todos;
   const index = todos.findIndex((todo) => todo.id === id);
   if (index === -1) {
-    console.error(`Task with id ${id} not found.`);
+    cLog(`Task with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
     process.exit(1);
   }
   todos[index].completed = false;
   branchObj.todos = todos;
   await writeBranchObject(branchObj);
-  console.log(`Marked task as incomplete: ${todos[index].task}`);
+  cLog(`Marked task as incomplete: ${todos[index].task}`);
 }
 
 export async function deleteTask(id) {
@@ -131,13 +154,13 @@ export async function deleteTask(id) {
   const todos = branchObj.todos;
   const index = todos.findIndex((todo) => todo.id === id);
   if (index === -1) {
-    console.error(`Task with id ${id} not found.`);
+    cLog(`Task with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
     process.exit(1);
   }
   const [deleted] = todos.splice(index, 1);
   branchObj.todos = todos;
   await writeBranchObject(branchObj);
-  console.log(`Deleted task: ${deleted.task}`);
+  cLog(`Deleted task: ${deleted.task}`);
 }
 
 export async function updateTask(id, task) {
@@ -146,12 +169,12 @@ export async function updateTask(id, task) {
   const index = todos.findIndex((todo) => todo.id == id);
 
   if (index === -1) {
-    console.error(`Task with id ${id} not found.`);
+    cLog(`Task with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
     process.exit(1);
   }
 
   if (!task) {
-    console.error('Please provide a new task description.');
+    cLog('Please provide a new task description.', 'redBright');
     process.exit(1);
   }
 
@@ -159,7 +182,7 @@ export async function updateTask(id, task) {
   todos[index] = updated;
   branchObj.todos = todos;
   await writeBranchObject(branchObj);
-  console.log(`Updated task: ${updated.task}`);
+  cLog(`Updated task: ${updated.task}`);
 }
 
 export async function updateTodo(id, todo, log = true) {
@@ -168,17 +191,17 @@ export async function updateTodo(id, todo, log = true) {
   const index = todos.findIndex((todo) => todo.id == id);
 
   if (index === -1) {
-    console.error(`Todo with id ${id} not found.`);
+    cLog(`Todo with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
     process.exit(1);
   }
 
   if (!todo) {
-    console.error('Please provide a new todo.');
+    cLog('Please provide a new todo.', 'redBright');
     process.exit(1);
   }
 
   todos[index] = todo;
   branchObj.todos = todos;
   await writeBranchObject(branchObj);
-  log ? console.log(`Updated todo: ${id}`) : null;
+  log ? cLog(`Updated todo: ${clr(id, 'cyanBright')}`) : null;
 }

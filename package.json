@@ -1,6 +1,6 @@
 {
   "name": "zap-tcm",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "description": "✅ If you want to know what zap is, just think of git but for your todos",
   "main": "index.js",
   "type": "module",
@@ -32,6 +32,7 @@
   "author": "Caleb Ephrem",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^5.6.2",
     "unique-custom-id": "^3.1.0"
   }
 }

@@ -87,6 +87,7 @@ npm link
 | export [branch] [file]       | Export tasks from a branch to a file                                            |
 | stats                        | Show statistics for the current branch (use stats -g for global stats)          |
 | config [scope] [key] [value] | Configuration for `--global` and `--local` settings                             |
+| config [key]                 | Get configuration value                                                         |
 | -v, --version                | Show version information                                                        |
 | -h, --help                   | Show help message                                                               |
 
