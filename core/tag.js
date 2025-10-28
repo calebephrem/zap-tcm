@@ -1,4 +1,4 @@
-import { cLog, clr } from '../utils/log.js';
+import { cLog, zapclr } from '../utils/log.js';
 import { getTodos, updateTodo } from './task.js';
 
 export async function tag(id, tag) {
@@ -14,9 +14,7 @@ export async function tag(id, tag) {
   const todo = todos.filter((t) => t.id == id)[0];
   todo.tag = tag;
   await updateTodo(id, todo, false);
-  cLog(
-    `Added tag "${clr(tag, 'yellowBright')}" to todo: ${clr(id, 'cyanBright')}`
-  );
+  cLog(`Added tag "${zapclr(tag, 'tag')}" to todo: ${zapclr(id, 'id')}`);
 }
 
 export async function removeTag(tag) {
@@ -30,10 +28,5 @@ export async function removeTag(tag) {
   const id = todos[index].id;
   todo.tag = undefined;
   await updateTodo(id, todo, false);
-  cLog(
-    `Removed tag "${clr(tag, 'yellowBright')}" from todo: ${clr(
-      id,
-      'cyanBright'
-    )}`
-  );
+  cLog(`Removed tag "${zapclr(tag, 'tag')}" from todo: ${zapclr(id, 'id')}`);
 }

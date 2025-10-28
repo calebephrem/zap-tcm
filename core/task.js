@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import ucid from 'unique-custom-id';
 import { createFolder, readFile, writeFile } from '../utils/fs.js';
-import { cLog, clr } from '../utils/log.js';
+import { cLog, zapclr } from '../utils/log.js';
 import {
   branch,
   currentBranch,
@@ -23,7 +23,7 @@ export async function init() {
     cLog('.zap repository already exists.', 'redBright');
     process.exit(1);
   }
-  cLog(`Initialized empty zap repository in ${clr(data.basedir, 'blue')}`);
+  cLog(`Initialized empty zap repository in ${zapclr(data.basedir, 'init')}`);
 }
 
 export async function moveTask(id, targetBranch) {
@@ -36,9 +36,9 @@ export async function moveTask(id, targetBranch) {
   const todoIndex = sourceObj.todos.findIndex((todo) => todo.id === id);
   if (todoIndex === -1) {
     cLog(
-      `Task with id ${clr(id, 'cyanBright')} not found in branch ${clr(
+      `Task with id ${zapclr(id, 'id')} not found in branch ${zapclr(
         sourceBranch,
-        'blueBright'
+        'branch'
       )}.`,
       'redBright'
     );
@@ -61,10 +61,10 @@ export async function moveTask(id, targetBranch) {
   targetObj.todos.push(todo);
   await writeBranchObject(targetObj);
   cLog(
-    `Moved task id ${clr(id, 'cyanBright')} from ${clr(
+    `Moved task id ${zapclr(id, 'id')} from ${zapclr(
       sourceBranch,
-      'blueBright'
-    )} to ${clr(targetBranch, 'blueBright')}.`
+      'branch'
+    )} to ${zapclr(targetBranch, 'branch')}.`
   );
 }
 
@@ -106,9 +106,9 @@ export async function listTasks() {
   }
   todos.forEach((todo) => {
     cLog(
-      `${clr(todo.id, 'cyanBright')}. ${clr('[', 'cyan')}${
-        todo.completed ? clr('x', 'redBright') : ' '
-      }${clr(']', 'cyan')} ${todo.task}${todo.tag ? ` (${todo.tag})` : ``}`
+      `${zapclr(todo.id, 'id')}. [${todo.completed ? zapclr('x', 'x') : ' '}] ${
+        todo.task
+      }${todo.tag ? ` (${zapclr(todo.tag, 'tag')})` : ``}`
     );
   });
 }
@@ -122,7 +122,7 @@ export async function completeTask(id) {
   const todos = branchObj.todos;
   const index = todos.findIndex((todo) => todo.id === id);
   if (index === -1) {
-    cLog(`Task with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
+    cLog(`Task with id ${zapclr(id, 'id')} not found.`, 'redBright');
     process.exit(1);
   }
   todos[index].completed = true;
@@ -140,7 +140,7 @@ export async function incompleteTask(id) {
   const todos = branchObj.todos;
   const index = todos.findIndex((todo) => todo.id === id);
   if (index === -1) {
-    cLog(`Task with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
+    cLog(`Task with id ${zapclr(id, 'id')} not found.`, 'redBright');
     process.exit(1);
   }
   todos[index].completed = false;
@@ -154,7 +154,7 @@ export async function deleteTask(id) {
   const todos = branchObj.todos;
   const index = todos.findIndex((todo) => todo.id === id);
   if (index === -1) {
-    cLog(`Task with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
+    cLog(`Task with id ${zapclr(id, 'id')} not found.`, 'redBright');
     process.exit(1);
   }
   const [deleted] = todos.splice(index, 1);
@@ -169,7 +169,7 @@ export async function updateTask(id, task) {
   const index = todos.findIndex((todo) => todo.id == id);
 
   if (index === -1) {
-    cLog(`Task with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
+    cLog(`Task with id ${clrzap(id, 'id')} not found.`, 'redBright');
     process.exit(1);
   }
 
@@ -191,7 +191,7 @@ export async function updateTodo(id, todo, log = true) {
   const index = todos.findIndex((todo) => todo.id == id);
 
   if (index === -1) {
-    cLog(`Todo with id ${clr(id, 'cyanBright')} not found.`, 'redBright');
+    cLog(`Todo with id ${zapclr(id, 'id')} not found.`, 'redBright');
     process.exit(1);
   }
 
@@ -203,5 +203,5 @@ export async function updateTodo(id, todo, log = true) {
   todos[index] = todo;
   branchObj.todos = todos;
   await writeBranchObject(branchObj);
-  log ? cLog(`Updated todo: ${clr(id, 'cyanBright')}`) : null;
+  log ? cLog(`Updated todo: ${zapclr(id, 'id')}`) : null;
 }

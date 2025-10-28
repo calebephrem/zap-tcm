@@ -1,6 +1,6 @@
 import path from 'path';
 import { readdir, readFile } from '../utils/fs.js';
-import { cLog, clr } from '../utils/log.js';
+import { cLog, zapclr } from '../utils/log.js';
 import { getBranchObject } from './branch.js';
 import data from './data.js';
 
@@ -23,9 +23,9 @@ export async function searchTodos(keyword) {
   );
   results.forEach((todo) => {
     cLog(
-      `${clr(todo.id, 'cyanBright')}. ${clr('[', 'cyan')}${
-        todo.completed ? clr('x', 'redBright') : ' '
-      }${clr(']', 'cyan')} ${todo.task}${todo.tag ? ` (${todo.tag})` : ``}`
+      `${zapclr(todo.id, 'id')}. [${todo.completed ? zapclr('x', 'x') : ' '}] ${
+        todo.task
+      }${todo.tag ? ` (${zapclr(todo.tag, 'tag')})` : ``}`
     );
   });
 }
@@ -66,12 +66,9 @@ export async function searchTodosGlobally(keyword) {
   );
   allResults.forEach((todo) => {
     cLog(
-      `${clr('[', 'cyan')}${clr(todo.branch, 'blueBright')}${clr(
-        ']',
-        'cyan'
-      )} ${clr(todo.id, 'cyanBright')}. ${clr('[', 'cyan')}${
-        todo.completed ? clr('x', 'redBright') : ' '
-      }${clr(']', 'cyan')} ${todo.task}${todo.tag ? ` (${todo.tag})` : ``}`
+      `[${zapclr(todo.branch, 'branch')}] ${zapclr(todo.id, 'id')}. [${
+        todo.completed ? zapclr('x', 'x') : ' '
+      }] ${todo.task}${todo.tag ? ` (${zapclr(todo.tag, 'tag')})` : ``}`
     );
   });
 }

@@ -1,6 +1,6 @@
 import path from 'path';
 import { readdir, readFile } from '../utils/fs.js';
-import { cLog, clr } from '../utils/log.js';
+import { cLog, clr, zapclr } from '../utils/log.js';
 import { getBranchObject } from './branch.js';
 import data from './data.js';
 
@@ -14,7 +14,7 @@ export async function stats() {
   const productivityRate = totalTasks
     ? ((completedTasks / totalTasks) * 100).toFixed(2)
     : 0;
-  cLog(`Statistics for branch: ${clr(branchObj.name, 'blueBright')}`);
+  cLog(`Statistics for branch: ${zapclr(branchObj.name, 'branch')}`);
   cLog(`Total tasks: ${clr(totalTasks, 'greenBright')}`);
   cLog(`Completed tasks: ${clr(completedTasks, 'cyanBright')}`);
   cLog(`Incomplete tasks: ${clr(incompleteTasks, 'redBright')}`);

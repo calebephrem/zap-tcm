@@ -1,5 +1,11 @@
 # Change Log
 
+## `v3.6.0`
+
+### 🚀 Enhancements
+
+- Add quantum colors to outputs
+
 ## `v3.5.0`
 
 ### 🚀 Enhancements

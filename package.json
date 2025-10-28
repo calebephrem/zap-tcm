@@ -1,6 +1,6 @@
 {
   "name": "zap-tcm",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "✅ If you want to know what zap is, just think of git but for your todos",
   "main": "index.js",
   "type": "module",

@@ -1,7 +1,7 @@
 import path from 'path';
 import ucid from 'unique-custom-id';
 import { readdir, readFile, rmfile, writeFile } from '../utils/fs.js';
-import { cLog, clr, padLog } from '../utils/log.js';
+import { cLog, padLog, zapclr } from '../utils/log.js';
 import { sliceSHA } from '../utils/zap.js';
 import data from './data.js';
 
@@ -26,9 +26,9 @@ export async function branch(name, log = true) {
   );
   log
     ? cLog(
-        `Created branch: ${clr(name, 'blue')} [${clr(
+        `Created branch: ${zapclr(name, 'branch')} [${zapclr(
           sliceSHA(id),
-          'yellowBright'
+          'id'
         )}]`
       )
     : null;
@@ -75,17 +75,14 @@ export async function deleteBranch(name) {
   const branches = await readdir(data.basedir);
   const exists = branches.includes(`${name}.json`);
   if (!exists) {
-    cLog(`Branch ${clr(name, 'blueBright')} does not exist.`, 'redBright');
+    cLog(`Branch ${zapclr(name, 'branch')} does not exist.`, 'redBright');
     process.exit(1);
   }
   const raw = await readFile(path.join(data.basedir, `${name}.json`));
   const id = JSON.parse(raw).id;
   await rmfile(path.join(data.basedir, `${name}.json`));
   cLog(
-    `Deleted branch ${clr(name, 'blueBright')} [${clr(
-      sliceSHA(id),
-      'yellowBright'
-    )}]`
+    `Deleted branch ${zapclr(name, 'branch')} [${zapclr(sliceSHA(id), 'id')}]`
   );
 }
 
@@ -127,9 +124,9 @@ export async function mergeBranches(sourceBranch, targetBranch) {
   targetObj.todos.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   await writeBranchObject(targetObj);
   cLog(
-    `Merged branch ${clr(sourceBranch, 'blueBright')} into ${clr(
+    `Merged branch ${zapclr(sourceBranch, 'branch')} into ${zapclr(
       targetBranch,
-      'blueBright'
+      'branch'
     )}.`
   );
 }
@@ -142,16 +139,13 @@ export async function renameBranch(branchName, newBranchName) {
   const branches = await readdir(data.basedir);
   const exists = branches.includes(`${branchName}.json`);
   if (!exists) {
-    cLog(
-      `Branch ${clr(branchName, 'blueBright')} does not exist.`,
-      'redBright'
-    );
+    cLog(`Branch ${zapclr(branchName, 'branch')} does not exist.`, 'redBright');
     process.exit(1);
   }
   const newExists = branches.includes(`${newBranchName}.json`);
   if (newExists) {
     cLog(
-      `Branch ${clr(newBranchName, 'blueBright')} already exists.`,
+      `Branch ${zapclr(newBranchName, 'branch')} already exists.`,
       'redBright'
     );
     process.exit(1);
@@ -182,18 +176,18 @@ export async function importExportBranch(name, direction, filepath) {
     const branchObj = await getBranchObject();
     await writeFile(filepath, JSON.stringify(branchObj, null, 2));
     cLog(
-      `Exported branch ${clr(name, 'blueBright')} to ${clr(
+      `Exported branch ${zapclr(name, 'branch')} to ${zapclr(
         filepath,
-        'blueBright'
+        'branch'
       )}`
     );
   } else if (direction === 'import') {
     const content = await readFile(filepath);
     await writeFile(file, content);
     cLog(
-      `Imported branch ${clr(name, 'blueBright')} from ${clr(
+      `Imported branch ${zapclr(name, 'branch')} from ${zapclr(
         filepath,
-        'blueBright'
+        'branch'
       )}`
     );
   } else {
@@ -211,7 +205,7 @@ export async function switchBranch(br) {
   } else {
     await writeFile(data.branch, br);
   }
-  cLog(`Switched to branch: ${clr(br, 'blueBright')}`);
+  cLog(`Switched to branch: ${zapclr(br, 'branch')}`);
 }
 
 export async function currentBranch() {
