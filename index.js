@@ -72,7 +72,7 @@ Import / Export:
   export <branch> <file>                Export tasks to file
 
 Branch Intelligence:
-  merge <source> <target>               Merge branches
+  merge <source> <target> [--unsort]    Merge branches (unsort based on createdAt if flag provided)
   stats                                 Show branch stats
   stats [-g | --global]                 Global statistics
 
@@ -143,7 +143,11 @@ switch (cmd) {
     break;
 
   case 'merge':
-    await mergeBranches(args[1], args[2]);
+    if (args.includes('--unsort')) {
+      await mergeBranches(args[1], args[2], false);
+    } else {
+      await mergeBranches(args[1], args[2]);
+    }
     break;
 
   case 'tag':

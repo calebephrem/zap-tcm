@@ -5,6 +5,7 @@
 ### 🚀 Enhancements
 
 - Add quantum colors to outputs
+- Add `--unsort` flag to disable `createdAt` sorting (sorts by id if flag provided)
 
 ## `v3.5.0`
 

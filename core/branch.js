@@ -86,7 +86,7 @@ export async function deleteBranch(name) {
   );
 }
 
-export async function mergeBranches(sourceBranch, targetBranch) {
+export async function mergeBranches(sourceBranch, targetBranch, sort = true) {
   if (!targetBranch) {
     targetBranch = await currentBranch();
   }
@@ -121,7 +121,11 @@ export async function mergeBranches(sourceBranch, targetBranch) {
   targetObj.todos.forEach((todo, i) => {
     todo.id = i + 1;
   });
-  targetObj.todos.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  if (sort) {
+    targetObj.todos.sort(
+      (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+    );
+  }
   await writeBranchObject(targetObj);
   cLog(
     `Merged branch ${zapclr(sourceBranch, 'branch')} into ${zapclr(
