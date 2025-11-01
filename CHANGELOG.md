@@ -6,6 +6,7 @@
 
 - Add quantum colors to outputs
 - Add `--unsort` flag to disable `createdAt` sorting (sorts by id if flag provided)
+- Add tag renaming via `-r`/`--rename` flags
 
 ## `v3.5.0`
 

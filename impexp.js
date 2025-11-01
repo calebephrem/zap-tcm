@@ -13,7 +13,7 @@ import { getGlobalConfig, setConfig } from './core/config.js';
 import { data } from './core/data.js';
 import { searchTodos, searchTodosGlobally } from './core/search.js';
 import { globalStats, stats } from './core/stats.js';
-import { removeTag, tag } from './core/tag.js';
+import { removeTag, renameTag, tag } from './core/tag.js';
 import {
   addTask,
   completeTask,
@@ -37,15 +37,19 @@ export {
   data,
   deleteBranch,
   deleteTask,
-  getBranchObject, getGlobalConfig, getTodos,
+  getBranchObject,
+  getGlobalConfig,
+  getTodos,
   globalStats,
   importExportBranch,
-  incompleteTask, init,
+  incompleteTask,
+  init,
   listTasks,
   mergeBranches,
   moveTask,
   removeTag,
   renameBranch,
+  renameTag,
   searchTodos,
   searchTodosGlobally,
   setConfig,

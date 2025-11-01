@@ -18,6 +18,7 @@ import {
   moveTask,
   removeTag,
   renameBranch,
+  renameTag,
   searchTodos,
   searchTodosGlobally,
   setConfig,
@@ -153,6 +154,8 @@ switch (cmd) {
   case 'tag':
     if (args[1] == '-d' || args[1] == '--delete') {
       await removeTag(args[2]);
+    } else if (args[1] == '-r' || args[1] == '--rename') {
+      await renameTag(args[2], args[3]);
     } else {
       await tag(args[1], args[2]);
     }

@@ -30,3 +30,17 @@ export async function removeTag(tag) {
   await updateTodo(id, todo, false);
   cLog(`Removed tag "${zapclr(tag, 'tag')}" from todo: ${zapclr(id, 'id')}`);
 }
+
+export async function renameTag(tag, newTag) {
+  if (!tag || !newTag) {
+    cLog('Please provide both current tag and new tag names', 'redBright');
+    process.exit(1);
+  }
+  const todos = await getTodos();
+  const todo = todos.filter((t) => t.tag == tag)[0];
+  const index = todos.indexOf(todo);
+  const id = todos[index].id;
+  todo.tag = newTag;
+  await updateTodo(id, todo, false);
+  cLog(`Renamed tag "${zapclr(tag, 'tag')}" to "${zapclr(newTag, 'tag')}"`);
+}
