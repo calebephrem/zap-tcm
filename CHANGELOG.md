@@ -1,5 +1,11 @@
 # Change Log
 
+## `v4.0.0`
+
+### ✨ Introduce
+
+- Introduce zapg for global todo tracking
+
 ## `v3.7.0`
 
 ### 🛠️ Fixes

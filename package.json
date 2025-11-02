@@ -1,11 +1,12 @@
 {
   "name": "zap-tcm",
-  "version": "3.7.0",
+  "version": "4.0.0",
   "description": "✅ If you want to know what zap is, just think of git but for your todos",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "zap": "index.js"
+    "zap": "index.js",
+    "zapg": "index.zg.js"
   },
   "repository": {
     "type": "git",

@@ -26,7 +26,7 @@ import {
   switchBranch,
   tag,
   updateTask,
-} from './impexp.js';
+} from './impexp.zg.js';
 
 const args = process.argv.slice(2);
 
