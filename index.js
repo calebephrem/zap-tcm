@@ -92,100 +92,156 @@ switch (cmd) {
     await init();
     break;
 
-  case 'branch':
-    if (args[1] === '-d' || args[1] === '--delete') {
-      await deleteBranch(args[2]);
-    } else if (args[1] === '-r' || args[1] === '--rename') {
-      await renameBranch(args[2], args[3]);
+  case 'branch': {
+    const params = args.slice(1);
+    const flags = params.filter((p) => p && p.startsWith('-'));
+    const positional = params.filter((p) => !p || !p.startsWith('-') ? p : false).filter(Boolean);
+
+    if (flags.includes('-d') || flags.includes('--delete')) {
+      await deleteBranch(positional[0]);
+    } else if (flags.includes('-r') || flags.includes('--rename')) {
+      await renameBranch(positional[0], positional[1]);
     } else {
-      await branch(args[1]);
+      await branch(positional[0]);
     }
+  }
     break;
 
-  case 'switch':
-    await switchBranch(args[1]);
+  case 'switch': {
+    const params = args.slice(1);
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+    await switchBranch(positional[0]);
+  }
     break;
 
-  case 'add':
-    await addTask(args.slice(1).join(' '));
+  case 'add': {
+    const params = args.slice(1);
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+    await addTask(positional.join(' '));
+  }
     break;
 
   case 'list':
     await listTasks();
     break;
 
-  case 'update':
-    await updateTask(parseInt(args[1], 10), args.slice(2).join(' '));
+  case 'update': {
+    const params = args.slice(1);
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+    await updateTask(parseInt(positional[0], 10), positional.slice(1).join(' '));
+  }
     break;
 
   case 'remove':
-  case 'rm':
-    await deleteTask(parseInt(args[1], 10));
+  case 'rm': {
+    const params = args.slice(1);
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+    await deleteTask(parseInt(positional[0], 10));
+  }
     break;
 
-  case 'complete':
-    await completeTask(parseInt(args[1], 10));
+  case 'complete': {
+    const params = args.slice(1);
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+    await completeTask(parseInt(positional[0], 10));
+  }
     break;
 
-  case 'move':
-    await moveTask(parseInt(args[1], 10), args[2]);
+  case 'move': {
+    const params = args.slice(1);
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+    await moveTask(parseInt(positional[0], 10), positional[1]);
+  }
     break;
 
-  case 'incomplete':
-    await incompleteTask(parseInt(args[1], 10));
+  case 'incomplete': {
+    const params = args.slice(1);
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+    await incompleteTask(parseInt(positional[0], 10));
+  }
     break;
 
-  case 'search':
-    if (args[1] === '--global' || args[1] === '-g') {
-      await searchTodosGlobally(args.slice(2).join(' '));
+  case 'search': {
+    const params = args.slice(1);
+    const flags = params.filter((p) => p && p.startsWith('-'));
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+
+    if (flags.includes('--global') || flags.includes('-g')) {
+      await searchTodosGlobally(positional.join(' '));
     } else {
-      await searchTodos(args.slice(1).join(' '));
+      await searchTodos(positional.join(' '));
     }
+  }
     break;
 
-  case 'merge':
-    if (args.includes('--unsort')) {
-      await mergeBranches(args[1], args[2], false);
+  case 'merge': {
+    const params = args.slice(1);
+    const flags = params.filter((p) => p && p.startsWith('-'));
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+
+    if (flags.includes('--unsort')) {
+      await mergeBranches(positional[0], positional[1], false);
     } else {
-      await mergeBranches(args[1], args[2]);
+      await mergeBranches(positional[0], positional[1]);
     }
+  }
     break;
 
-  case 'tag':
-    if (args[1] == '-d' || args[1] == '--delete') {
-      await removeTag(args[2]);
-    } else if (args[1] == '-r' || args[1] == '--rename') {
-      await renameTag(args[2], args[3]);
+  case 'tag': {
+    const params = args.slice(1);
+    const flags = params.filter((p) => p && p.startsWith('-'));
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+
+    if (flags.includes('-d') || flags.includes('--delete')) {
+      await removeTag(positional[0]);
+    } else if (flags.includes('-r') || flags.includes('--rename')) {
+      await renameTag(positional[0], positional[1]);
     } else {
-      await tag(args[1], args[2]);
+      await tag(positional[0], positional[1]);
     }
+  }
     break;
 
-  case 'import':
-    await importExportBranch(args[1], 'import', args[2]);
+  case 'import': {
+    const params = args.slice(1);
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+    await importExportBranch(positional[0], 'import', positional[1]);
+  }
     break;
 
-  case 'export':
-    await importExportBranch(args[1], 'export', args[2]);
+  case 'export': {
+    const params = args.slice(1);
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+    await importExportBranch(positional[0], 'export', positional[1]);
+  }
     break;
 
-  case 'stats':
-    if (args[1] == '--global' || args[1] == '-g') {
+  case 'stats': {
+    const params = args.slice(1);
+    const flags = params.filter((p) => p && p.startsWith('-'));
+
+    if (flags.includes('--global') || flags.includes('-g')) {
       await globalStats();
     } else {
       await stats();
     }
+  }
     break;
 
-  case 'config':
-    if (args[1] === '--global' || args[1] === '-g') {
-      await setConfig('global', args[2], args[3]);
-    } else if (args[1] === '--local' || args[1] === '-l') {
-      await setConfig('local', args[2], args[3]);
+  case 'config': {
+    const params = args.slice(1);
+    const flags = params.filter((p) => p && p.startsWith('-'));
+    const positional = params.filter((p) => !(p && p.startsWith('-')));
+
+    if (flags.includes('--global') || flags.includes('-g')) {
+      await setConfig('global', positional[0], positional[1]);
+    } else if (flags.includes('--local') || flags.includes('-l')) {
+      await setConfig('local', positional[0], positional[1]);
     } else {
       const globalConfig = await getGlobalConfig();
-      cLog(globalConfig[args[1]] || '', 'blue');
+      cLog(globalConfig[positional[0]] || '', 'blue');
     }
+  }
     break;
 
   case '--help':

@@ -1,5 +1,16 @@
 # Change Log
 
+## `v3.7.0`
+
+### 🛠️ Fixes
+
+- Flag position no longer affects execution
+
+### ❤️ Contributors
+
+- [@calebephrem](https://github.com/calebephrem)
+- [@mesygir](https://github.com/mesygir)
+
 ## `v3.6.0`
 
 ### 🚀 Enhancements
