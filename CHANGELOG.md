@@ -1,5 +1,11 @@
 # Change Log
 
+## `v3.7.0`
+
+### 🛠️ Fixes
+
+- Include `zapg` in README
+
 ## `v4.0.0`
 
 ### ✨ Introduce

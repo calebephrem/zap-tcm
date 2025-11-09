@@ -66,6 +66,10 @@ npm link
 
 ## 📚 Command Reference
 
+- `zap [command]` — for current project (directory) (`./.zap`)
+- `zapg [command]` — for global task management in home directory (`~/.zap`)
+
+
 | Command                                | Description                                                                                    |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | init                                   | Initialize a new zap repository                                                                |
