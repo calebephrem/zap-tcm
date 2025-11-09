@@ -83,7 +83,7 @@ Configuration:
   config <key>                          Get configuration value
 
 General:
-  [-v | --version]                      Show version
+  [-v | --version]                      Show current version of zap
   [-h | --help]                         Show this help message
 `;
 

@@ -44,10 +44,10 @@ const helpText = `
                                       Task Manager
 
 Usage:
-  zap <command> [options]
+  zapg <command> [options]
 
 Core Commands:
-  init                                  Initialize a new zap repository
+  init                                  Initialize a zap repository
   branch [name]                         Create a branch (or list branches if name is not provided)
   branch [-d | --delete] <name>         Delete a branch
   switch <name>                         Switch to a branch
@@ -83,7 +83,7 @@ Configuration:
   config <key>                          Get configuration value
 
 General:
-  [-v | --version]                      Show version
+  [-v | --version]                      Show current version of zapg
   [-h | --help]                         Show this help message
 `;
 
