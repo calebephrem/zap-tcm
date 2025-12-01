@@ -1,5 +1,11 @@
 # Change Log
 
+## `v4.0.3`
+
+### 🛠️ Fixes
+
+- Fix error when arg is not passed in `zap` and `zapg`
+
 ## `v4.0.2`
 
 ### 🛠️ Fixes

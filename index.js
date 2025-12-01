@@ -30,10 +30,6 @@ import {
 
 const args = process.argv.slice(2);
 
-const cmd = process.argv.slice(2)[0].startsWith('--')
-  ? undefined
-  : process.argv.slice(2)[0];
-
 const helpText = `
                                   ███████╗ █████╗ ██████╗
                                   ╚══███╔╝██╔══██╗██╔══██╗
@@ -86,6 +82,13 @@ General:
   [-v | --version]                      Show current version of zap
   [-h | --help]                         Show this help message
 `;
+
+if (!args.length) {
+  cLog(helpText);
+  process.exit(1);
+}
+
+const cmd = args[0].startsWith('--') ? undefined : process.argv.slice(2)[0];
 
 switch (cmd) {
   case 'init':
